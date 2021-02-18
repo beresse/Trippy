@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
 import HotelCard from "../components/HotelCard";
+import HotelMap from "./../components/HotelMap";
 
 class Hotels extends React.Component {
   constructor(props) {
@@ -9,6 +10,10 @@ class Hotels extends React.Component {
       cities: [],
       hotelDetails: [],
       img: "http://localhost:3002",
+      center: {
+        lat: 0,
+        lon: 0
+      }
     };
   }
 
@@ -25,6 +30,7 @@ class Hotels extends React.Component {
         console.log("results", results);
         this.setState({
           hotelDetails: results.results,
+          center: results.center
         });
       })
       .catch((error) => console.error(error));
@@ -33,11 +39,17 @@ class Hotels extends React.Component {
   render() {
     return (
       <div className='container d-flex flex-column justify-content-center'>
+        <div>
+          <HotelMap center={this.state.center} hotel={this.state.cities} />
+        </div>
+
         <h1 className='text-center tabTitle'>City details</h1>
+
         {this.state.hotelDetails.length > 0 &&
           this.state.hotelDetails.map((hotel) => {
-            console.log(hotel);
+            console.log(hotel);                                                                                                                                                                                                                                                                             
             return (
+
               <Link to={`/hotel/${hotel._id}`}>
                 <HotelCard
                   name={hotel.name}
@@ -46,11 +58,16 @@ class Hotels extends React.Component {
                   alt={`${hotel.name}`}
                   price={hotel.price}
                   stars={hotel.stars}
+
                 />
               </Link>
+
             );
+
+
           })}
       </div>
+
     );
   }
 }
